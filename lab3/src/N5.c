@@ -1,31 +1,33 @@
-#include <ctype.h>
-#include <limits.h>
-#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
+#include <sys/wait.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 
-#include <getopt.h>
+int main(int argc, char **argv) {
+	int pid = fork();
 
-int main( void ) {
-	char *argv[3] = {"5", "10", "2"};
-
-	pid_t pid = fork();
-
+    int i = 1;
 	if ( pid == 0 ) {
-		execlp( "parallel_min_max", *argv , NULL);
+	    char* argv1[argc + 1];
+	    
+	    argv1[0] = "parallel_min_max";
+	    for (; i < argc; ++i) {
+	        argv1[i] = argv[i];
+	    }
+	    argv1[argc] = NULL;
+	    
+		execl("parallel_min_max", "parallel_min_max", "--seed", "5", "--array_size", "5", "--pnum", "2", "-f", NULL);
+		
+		return 0;
 	}
 
-	/* Put the parent to sleep for 2 seconds--let the child finished executing */
-	sleep(2);
+    if (pid != 0) {
+	   wait(NULL);
 
-	printf( "Finished executing the parent process\n"
-	        " - the child won't get here--you will only see this once\n" );
-
+	   printf("Exec finished\n");
+    }
+    
 	return 0;
 }
