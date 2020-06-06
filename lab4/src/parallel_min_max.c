@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
                                       {"array_size", required_argument, 0, 0},
                                       {"pnum", required_argument, 0, 0},
                                       {"by_files", no_argument, 0, 'f'},
-                                      {"timeout", , 0, 0},
+                                      {"timeout", optional_argument, 0, 0},
                                       {0, 0, 0, 0}};
 
     int option_index = 0;
@@ -71,13 +71,14 @@ int main(int argc, char **argv) {
             // error handling
             break;
           case 3:
-            timeout = atoi(optarg);
+            /*timeout = atoi(optarg);
             if(timeout == 0) with_files = true;
             else if(timeout < 1)
             {
                 printf("timeout is a positive number\n");
                 return 1;
-            }
+            }*/
+            with_files = true;
             break;
           case 4:
             timeout = atoi(optarg);
