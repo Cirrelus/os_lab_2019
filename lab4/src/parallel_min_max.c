@@ -20,6 +20,7 @@ int main(int argc, char **argv) {
   int array_size = -1;
   int pnum = -1;
   bool with_files = false;
+  int timeout = -1;
 
   while (true) {
     int current_optind = optind ? optind : 1;
@@ -28,6 +29,7 @@ int main(int argc, char **argv) {
                                       {"array_size", required_argument, 0, 0},
                                       {"pnum", required_argument, 0, 0},
                                       {"by_files", no_argument, 0, 'f'},
+                                      {"timeout", , 0, 0},
                                       {0, 0, 0, 0}};
 
     int option_index = 0;
@@ -53,8 +55,8 @@ int main(int argc, char **argv) {
             // your code here
             if (array_size <= 0) 
             {
-            printf("array_size is a positive number\n");
-            return 1;
+                printf("array_size is a positive number\n");
+                return 1;
             }
             // error handling
             break;
@@ -63,13 +65,27 @@ int main(int argc, char **argv) {
             // your code here
              if (pnum < 1) 
             {
-            printf("at least 1 parallel process should be started\n");
-            return 1;
+                printf("at least 1 parallel process should be started\n");
+                return 1;
             }
             // error handling
             break;
           case 3:
-            with_files = true;
+            timeout = atoi(optarg);
+            if(timeout == 0) with_files = true;
+            else if(timeout < 1)
+            {
+                printf("timeout is a positive number\n");
+                return 1;
+            }
+            break;
+          case 4:
+            timeout = atoi(optarg);
+            if (timeout < 1)
+            {
+                printf("timeout is a positive number\n");
+                return 1;
+            }
             break;
 
           defalut:
@@ -98,6 +114,8 @@ int main(int argc, char **argv) {
            argv[0]);
     return 1;
   }
+
+  printf("timeout = %d\n", timeout);
 
   int *array = malloc(sizeof(int) * array_size);
   GenerateArray(array, array_size, seed);
