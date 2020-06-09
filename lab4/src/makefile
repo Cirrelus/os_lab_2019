@@ -1,9 +1,9 @@
 CC=gcc
 CFLAGS=-I.
 
-all : parallel_min_max
+all : parallel_min_max zombee process_memory
 
-parallel_min_max : utils.o find_min_max.o utils.h find_min_max.h
+parallel_min_max : utils.o find_min_max.o 
 	$(CC) -o parallel_min_max utils.o find_min_max.o parallel_min_max.c $(CFLAGS)
 
 utils.o : utils.h
@@ -12,5 +12,11 @@ utils.o : utils.h
 find_min_max.o : utils.h find_min_max.h
 	$(CC) -o find_min_max.o -c find_min_max.c $(CFLAGS)
 
+zombee :
+	$(CC) -o zombee zombee.c $(CFLAGS)
+
+process_memory :
+	$(CC) -o process_memory process_memory.c $(CFLAGS)
+ 
 clean :
-	rm utils.o find_min_max.o parallel_min_max
+	rm utils.o find_min_max.o parallel_min_max zombee
