@@ -15,6 +15,22 @@
 #include "find_min_max.h"
 #include "utils.h"
 
+pid_t group_pid[1000];
+int k = 0;
+void terminate (int param)
+{
+    printf("Killing all child procesesses %d\n", k);
+    int i;
+    int ret;
+    for (i = 0 ;i < k; i++) {
+        printf("trying to kill %d\n", group_pid[i]);
+        kill(group_pid[i], SIGKILL);
+        ret = waitpid(group_pid[i], NULL, WNOHANG);
+        printf("kill %d\n", ret);
+    }
+    exit(0);
+}
+
 int main(int argc, char **argv) {
   int seed = -1;
   int array_size = -1;
@@ -29,7 +45,7 @@ int main(int argc, char **argv) {
                                       {"array_size", required_argument, 0, 0},
                                       {"pnum", required_argument, 0, 0},
                                       {"by_files", no_argument, 0, 'f'},
-                                      {"timeout", optional_argument, 0, 0},
+                                      {"timeout", required_argument, 0, 0},
                                       {0, 0, 0, 0}};
 
     int option_index = 0;
@@ -63,7 +79,7 @@ int main(int argc, char **argv) {
           case 2:
             pnum = atoi(optarg);
             // your code here
-             if (pnum < 1) 
+            if (pnum < 1) 
             {
                 printf("at least 1 parallel process should be started\n");
                 return 1;
@@ -71,13 +87,6 @@ int main(int argc, char **argv) {
             // error handling
             break;
           case 3:
-            /*timeout = atoi(optarg);
-            if(timeout == 0) with_files = true;
-            else if(timeout < 1)
-            {
-                printf("timeout is a positive number\n");
-                return 1;
-            }*/
             with_files = true;
             break;
           case 4:
@@ -89,7 +98,7 @@ int main(int argc, char **argv) {
             }
             break;
 
-          defalut:
+          default:
             printf("Index %d is out of options\n", option_index);
         }
         break;
@@ -116,7 +125,10 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  printf("timeout = %d\n", timeout);
+  // создатение указателя на функцию и обработчика сигнала
+  void (*funcptr)(int);
+  funcptr = signal (SIGALRM, terminate);
+  alarm(timeout);
 
   int *array = malloc(sizeof(int) * array_size);
   GenerateArray(array, array_size, seed);
@@ -172,6 +184,8 @@ int main(int argc, char **argv) {
         }
         return 0;
       }
+      group_pid[k++]=child_pid;
+      sleep(1);
 
     } else {
       printf("Fork failed!\n");
