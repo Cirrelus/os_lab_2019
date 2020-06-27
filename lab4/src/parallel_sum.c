@@ -31,19 +31,19 @@ int Sum(const struct SumArgs *args) {
   return sum;
 }
 
-void *ThreadSum(void *args) {
+pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
 
+void *ThreadSum(void *args) {
+    pthread_mutex_lock(&mut);
 
   struct SumArgs *sum_args = (struct SumArgs *)args;
-    prt = array_size / threads_num;
-    if (f) {
-        modus = array_size % threads_num;
-        f = 0;
-    }
+    
       sum_args->begin = gran;
+      sleep(1);
       sum_args->end = gran + prt + modus;
       gran = sum_args->end;
       modus = 0;
+    pthread_mutex_unlock(&mut);
 
   return (void *)(size_t)Sum(sum_args);
 }
@@ -148,6 +148,8 @@ printf("!!\n");
   struct SumArgs args[threads_num];
   args->array = array;
 
+    prt = array_size / threads_num;
+    modus = array_size % threads_num;
 
   for (i = 0; i < threads_num; i++) {
     if (pthread_create(&threads[i], NULL, ThreadSum, (void *)&args)) {
