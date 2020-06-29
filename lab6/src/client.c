@@ -60,14 +60,14 @@ int main(int argc, char **argv) {
       case 0:
         ConvertStringToUI64(optarg, &k);
          if (!(k>0)) {
-            printf("k must be > 0\n");
+            printf("k mast be > 0!\n");
             return -1;
         }
         break;
       case 1:
         ConvertStringToUI64(optarg, &mod);
         if (mod < 2) {
-            printf("mod must be > 1\n");
+            printf("k mast be > 1!\n");
             return -1;
         }
         break;
