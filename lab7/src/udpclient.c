@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
   servaddr.sin_family = AF_INET;
   servaddr.sin_port = htons(SERV_PORT);
 
-  if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) < 0) {
+  if (inet_pton(AF_INET, ip, &servaddr.sin_addr) < 0) {
     perror("inet_pton problem");
     exit(1);
   }
