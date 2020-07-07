@@ -12,7 +12,7 @@ struct for_fac_struc {
     int *result;
 };
 
-int factmod (int n, int p);
+//int factmod (int n, int p);
 void result_fac(struct for_fac_struc *struc);
 void start_thread(int beg, int end, int mod, int *result, int j);
 
@@ -89,9 +89,7 @@ while (1) {
     printf("step - %d\n", step);
     int j;
 
-    for (j = 0; j < pnum; j++) {
-
-       
+    for (j = 0; j < pnum; j++) {   
         start_thread(beg, end, mod, &result, j);
        
         beg = end;
@@ -134,10 +132,10 @@ void result_fac(struct for_fac_struc *struc)
     int mod=struc->mod;
     int i;
     int res = 1;
-    int buf;
+    //int buf;
 
     for (i = begin; i < end; i++) {
-        buf = i % mod;
+        //buf = i % mod;
         res *= i;
         res %= mod;
     }
@@ -148,7 +146,7 @@ void result_fac(struct for_fac_struc *struc)
     pthread_mutex_unlock(&mut);
 }
 
-int factmod (int n, int p) {
+/*int factmod (int n, int p) {
 	int res = 1;
 	while (n > 1) {
 		res = (res * ((n/p) % 2 ? p-1 : 1)) % p;
@@ -158,4 +156,4 @@ int factmod (int n, int p) {
 		n /= p;
 	}
 	return res % p;
-}
+}*/
