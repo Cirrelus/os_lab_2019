@@ -1,0 +1,3 @@
+./server.out --port 20001 &
+./server.out --port 20002 &
+./client.out --k 5 --mod 7 --server ./servers.txt
