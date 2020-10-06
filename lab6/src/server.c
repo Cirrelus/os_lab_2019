@@ -97,19 +97,18 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  struct sockaddr_in server = create_sockaddr(port, htonl(INADDR_ANY));
+  struct sockaddr_in server = create_sockaddr((uint16_t)port, htonl(INADDR_ANY));
 
   int opt_val = 1;
   setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof(opt_val));
 
-  int err = bind(server_fd, (struct sockaddr *)&server, sizeof(server));
-  if (err < 0) {
-    fprintf(stderr, "Can not bind to socket!");
+
+  if (bind(server_fd, (struct sockaddr *)&server, sizeof(server)) < 0) {
+    fprintf(stderr, "Cannot bind to socket\n");
     return 1;
   }
 
-  err = listen(server_fd, 128);
-  if (err < 0) {
+  if (listen(server_fd, 128) < 0) {
     fprintf(stderr, "Could not listen on socket\n");
     return 1;
   }
@@ -177,8 +176,7 @@ int main(int argc, char **argv) {
       char buffer[256];
       sprintf(buffer, "%d", total);
 
-      err = send(client_fd, buffer, sizeof(total), 0);
-      if (err < 0) {
+      if (send(client_fd, buffer, sizeof(total), 0) < 0) {
         fprintf(stderr, "Can't send data to client\n");
         break;
       }
