@@ -28,7 +28,7 @@ uint64_t Factorial(const struct FactorialArgs *args) {
     {
         fac*=i;
         fac%=args->mod;
-        printf("%d %lu %d %lu\n", fac, args->begin, i, args->end);
+        printf("factorial=%d, begin=%lu, i=%d, end=%lu\n", fac, args->begin, i, args->end);
     }    
     return fac;
 }
@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
       memcpy(&end, from_client + sizeof(uint64_t), sizeof(uint64_t));
       memcpy(&mod, from_client + 2 * sizeof(uint64_t), sizeof(uint64_t));
 
-      fprintf(stdout, "Receive: %llu %llu %llu\n", begin, end, mod);
+      fprintf(stdout, "Receive: begin=%llu, end=%llu, mod=%llu\n", begin, end, mod);
 
       struct FactorialArgs args;
 
